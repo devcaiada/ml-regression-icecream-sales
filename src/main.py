@@ -3,10 +3,12 @@ from azureml.core import Workspace, Experiment, Dataset
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
+import mlflow
+import mlflow.sklearn
 
 # Carregar dados
-file_path = 'vendas_sorvete.xlsx'
-df = pd.read_excel(r'./data/vendas_sorvete.xlsx')
+file_path = 'data/vendas_sorvete.xlsx'
+df = pd.read_excel(file_path)
 
 # Conectar ao workspace do Azure ML
 ws = Workspace.from_config()
@@ -21,16 +23,18 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Treinar modelo de regressão
 modelo = LinearRegression()
-modelo.fit(X_train, y_train)
 
-# Previsão
-y_pred = modelo.predict(X_test)
+with mlflow.start_run():
+    modelo.fit(X_train, y_train)
 
-# Avaliação do modelo
-mse = mean_squared_error(y_test, y_pred)
-print("Erro quadrático médio:", mse)
+    # Previsão
+    y_pred = modelo.predict(X_test)
 
-# Logar resultado no Azure ML
-run = experiment.start_logging()
-run.log("MSE", mse)
-run.complete()
+    # Avaliação do modelo
+    mse = mean_squared_error(y_test, y_pred)
+    print("Erro quadrático médio:", mse)
+
+    # Logar métricas e modelo no MLflow
+    mlflow.log_metric("MSE", mse)
+    mlflow.sklearn.log_model(modelo, "modelo_regressao")
+    

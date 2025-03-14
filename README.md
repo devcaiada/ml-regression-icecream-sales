@@ -29,6 +29,8 @@ from azureml.core import Workspace, Experiment, Dataset
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
+import mlflow
+import mlflow.sklearn
 
 # Carregar dados
 file_path = 'data/vendas_sorvete.xlsx'
@@ -47,24 +49,25 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Treinar modelo de regressão
 modelo = LinearRegression()
-modelo.fit(X_train, y_train)
 
-# Previsão
-y_pred = modelo.predict(X_test)
+with mlflow.start_run():
+    modelo.fit(X_train, y_train)
 
-# Avaliação do modelo
-mse = mean_squared_error(y_test, y_pred)
-print("Erro quadrático médio:", mse)
+    # Previsão
+    y_pred = modelo.predict(X_test)
 
-# Logar resultado no Azure ML
-run = experiment.start_logging()
-run.log("MSE", mse)
-run.complete()
+    # Avaliação do modelo
+    mse = mean_squared_error(y_test, y_pred)
+    print("Erro quadrático médio:", mse)
+
+    # Logar métricas e modelo no MLflow
+    mlflow.log_metric("MSE", mse)
+    mlflow.sklearn.log_model(modelo, "modelo_regressao")
 ```
 
 ## Conclusão
 
-Com base no modelo de regressão linear, conseguimos prever a quantidade de vendas de sorvete com base na temperatura e no preço. O erro quadrático médio nos ajuda a entender a precisão do modelo. Com o Azure Machine Learning, é possível escalar essa solução e implementar melhorias contínuas com dados reais.
+om base no modelo de regressão linear, conseguimos prever a quantidade de vendas de sorvete com base na temperatura e no preço. O erro quadrático médio nos ajuda a entender a precisão do modelo. Com o Azure Machine Learning e o MLflow, é possível escalar essa solução, registrar métricas e implementar melhorias contínuas com dados reais.
 
 ## Contribuição <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Rocket" width="25" height="25" />
 
