@@ -62,3 +62,6 @@ run.complete()
 
 Com base no modelo de regressão linear, conseguimos prever a quantidade de vendas de sorvete com base na temperatura e no preço. O erro quadrático médio nos ajuda a entender a precisão do modelo. Com o Azure Machine Learning, é possível escalar essa solução e implementar melhorias contínuas com dados reais.
 
+## Contribuição <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Rocket" width="25" height="25" />
+
+Sinta-se à vontade para contribuir com este repositório. Abra uma issue ou envie um pull request com suas sugestões e melhorias.
