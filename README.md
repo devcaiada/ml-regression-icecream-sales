@@ -1,5 +1,9 @@
 # Prevendo Vendas de Sorvete com Machine Learning 🍦📊
 
+<p align="center">
+  <img src="https://github.com/devcaiada/ml-regression-icecream-sales/blob/main/assets/mls.png?raw=true" alt="Imagem centralizada">
+</p>
+
 ## Descrição do Projeto
 
 Este projeto tem como objetivo prever a quantidade de vendas de sorvete com base em dados históricos de temperatura e preço. Utilizaremos Python com o Azure Machine Learning para construir um modelo de regressão.
